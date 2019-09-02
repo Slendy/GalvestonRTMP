@@ -1,7 +1,6 @@
 var cids = ["CID_JVHJ0000009B", "CID_HCIR000000A0", "CID_KLBA00000098", "CID_ZFXT00000403", "CID_KPIK000004AD"];
 
 for(var i = 0; i < cids.length; i++){
-  console.log(cids[i]);
   request(cids[i], i);
 }
 
@@ -14,7 +13,6 @@ function request(url, index){
   http.send();
   http.onreadystatechange = function(){
     if(http.readyState == 4){
-      console.log(http.responseText);
       var oid = find(http.responseText.split("\n"), "session_oid=");
       var http2 = new XMLHttpRequest();
       http2.open("GET", "https://relay.ozolio.com/ses.api?cmd=open&oid=" + oid + "&type=live&format=rtmp&profile=&rid=live_open_1")
