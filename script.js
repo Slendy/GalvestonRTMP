@@ -19,7 +19,7 @@ function request(url, index){
       http2.send();
       http2.onreadystatechange = function(){
         if(http2.readyState == 4){
-          responseText += "<br>" + find(http2.responseText.split("\n"), "output_url=")+ " " + name(url) + "</br>";
+          responseText += "<br>" + name(url) + "</br>" + find(http2.responseText.split("\n"), "output_url=") + "</br>";
           if(index == 4)
             document.body.innerHTML = responseText.substring(4);
         }
