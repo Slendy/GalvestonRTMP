@@ -4,7 +4,7 @@ function setup() {
     document.getElementById("form2").addEventListener("submit", event => {
         event.preventDefault();
         var cid = event.target[0].value;
-        if(cid.startsWith("CID") && cid.length == 16){
+        if (cid.startsWith("CID") && cid.length == 16) {
             cids = [cid];
             fetchLinks();
         } else {
@@ -15,18 +15,20 @@ function setup() {
         event.preventDefault();
         cids = Array(event.target.length - 1).fill(0);
         checked = 0;
-        for (var i = 0; i < event.target.length - 1; i++) {
+        for (var i = 0; i < event.target.length - 2; i++) {
             if (event.target[i].checked) {
                 cids[checked] = event.target[i].name;
                 checked++;
             }
         }
+        videoType = event.target[event.target.length - 2].value;
         cids.length = checked;
         fetchLinks();
     });
 }
 window.onload = setup();
 
+videoType = "";
 responses = Array(cids.length).fill(0);
 completedRequests = 0;
 
@@ -46,7 +48,7 @@ function request(url, index) {
         if (http.readyState == 4) {
             var oid = find(http.responseText.split("\n"), "session_oid=");
             var http2 = new XMLHttpRequest();
-            http2.open("GET", "https://relay.ozolio.com/ses.api?cmd=open&oid=" + oid + "&type=live&format=rtmp&profile=&rid=live_open_1")
+            http2.open("GET", "https://relay.ozolio.com/ses.api?cmd=open&oid=" + oid + "&type=live&format=" + videoType + "&profile=&rid=live_open_1")
             http2.send();
             http2.onreadystatechange = function() {
                 if (http2.readyState == 4) {
@@ -69,7 +71,7 @@ function checkDone() {
     }
 }
 
-function reload(){
+function reload() {
     location.reload();
 }
 
