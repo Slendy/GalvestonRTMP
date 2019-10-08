@@ -6,6 +6,7 @@ function setup() {
         var cid = event.target[0].value;
         if (cid.startsWith("CID") && cid.length == 16) {
             cids = [cid];
+            videoType = document.getElementsByName("list")[0].value;
             fetchLinks();
         } else {
             document.getElementById("error_msg").innerHTML = "Invalid camera id"
