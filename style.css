@@ -16,6 +16,7 @@ button {
   width: 65px;
   height: 20px;
   font: 14px arial, sans-serif;
+  padding: 0px
 }
 button:hover {
   background-color: #606060
