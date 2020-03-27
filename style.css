@@ -1,0 +1,35 @@
+h1 {
+  text-align: center;
+  font: 60px arial, sans-serif;
+  color: #222222;
+  margin-bottom: 5px;
+}
+form {
+  font: 15px arial, sans-serif;
+  zoom: 1.4;
+}
+button {
+  cursor: pointer;
+  background-color: gray;
+  color: white;
+  border: none;
+  width: 65px;
+  height: 20px;
+  font: 14px arial, sans-serif;
+}
+button:hover {
+  background-color: #606060
+}
+#response {
+  padding-top: 70px;
+  text-align: center;
+  font: 20px arial, sans-serif;
+}
+#back {
+  width: 110px;
+  height: 35px;
+  font: 23px arial, sans-serif;
+}
+#customInput {
+  text-align: center;
+}

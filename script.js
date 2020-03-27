@@ -1,19 +1,24 @@
-cids = [];
-
-function setup() {
-    document.getElementById("form2").addEventListener("submit", event => {
-        event.preventDefault();
-        var cid = event.target[0].value;
+var error;
+function handleClick(event){
+    event.preventDefault();
+    var cids = [];
+    var cid = document.getElementById("cidInput").value;
+    var videoType = document.getElementById("formatType").value;
+    if(cid != null && cid.length != 0){//custom 
         if (cid.startsWith("CID") && cid.length == 16) {
             cids = [cid];
-            videoType = document.getElementsByName("list")[0].value;
-            fetchLinks();
+            fetchLinks(cids);
         } else {
-            document.getElementById("error_msg").innerHTML = "Invalid camera id"
+            document.getElementById("error_msg").innerHTML = "Invalid camera id<br>";
+            if(error != null){
+                clearTimeout(error);
+            }
+            error = setTimeout(function(){
+              document.getElementById("error_msg").innerHTML = "";
+            }, 2000);
+
         }
-    });
-    document.getElementById("form1").addEventListener('submit', event => {
-        event.preventDefault();
+    } else {//checkboxes
         cids = Array(event.target.length - 1).fill(0);
         checked = 0;
         for (var i = 0; i < event.target.length - 2; i++) {
@@ -22,38 +27,49 @@ function setup() {
                 checked++;
             }
         }
-        videoType = event.target[event.target.length - 2].value;
         cids.length = checked;
-        fetchLinks();
-    });
+        fetchLinks(cids, videoType);
+    }
+}
+function setup() {
+    document.getElementById("customInput").addEventListener("submit", handleClick);
+    document.getElementById("checkBoxes").addEventListener("submit", handleClick);
 }
 window.onload = setup();
 
-videoType = "";
-responses = Array(cids.length).fill(0);
-completedRequests = 0;
+var responses;
+var completedRequests = 0;
+var totalSize;
 
-function fetchLinks() {
-
+function fetchLinks(cids, videoType) {
+    responses = Array(cids.length).fill(0)
+    totalSize = cids.length;
     for (var i = 0; i < cids.length; i++) {
-        request(cids[i], i);
+        request(cids[i], i, videoType);
     }
 }
 
-function request(url, index) {
-
+function request(cid, index, videoType) {
     var http = new XMLHttpRequest();
-    http.open("GET", "https://relay.ozolio.com/ses.api?cmd=init&oid=" + url + "&ver=4&url=https%3A//www.ozolio.com&chm=1&chf=0&svr=https%3A//relay.ozolio.com/&rid=sess_init");
+    http.open("GET", "https://relay.ozolio.com/ses.api?cmd=init&oid=" + cid + "&ver=5&channel=0&control=1&document=https%3A%2F%2Fwww.ozolio.com%2Fexplore");
     http.send();
     http.onreadystatechange = function() {
         if (http.readyState == 4) {
-            var oid = find(http.responseText.split("\n"), "session_oid=");
-            var http2 = new XMLHttpRequest();
-            http2.open("GET", "https://relay.ozolio.com/ses.api?cmd=open&oid=" + oid + "&type=live&format=" + videoType + "&profile=&rid=live_open_1")
-            http2.send();
-            http2.onreadystatechange = function() {
-                if (http2.readyState == 4) {
-                    responses[index] = find(http2.responseText.split("\n"), "output_url=") + ";" + find(http2.responseText.split("\n"), "output_name=");
+             if(http.status != 200){
+                 responses[index] = cid + ";Request failed. (Invalid cid?)"
+             }
+             var oid = http.responseText.substring(http.responseText.indexOf("id")+6, http.responseText.indexOf("server")-8);
+             http = new XMLHttpRequest();
+             http.open("GET", "https://relay.ozolio.com/ses.api?cmd=open&oid=" + oid + "&output=1&format=" + videoType.toUpperCase());
+             http.send();
+             http.onreadystatechange = function() {
+                if (http.readyState == 4) {
+                    if(http.status != 200){
+                        responses[index] = cid + ";Request failed. (Invalid cid?)"
+                    }
+                    var name = http.responseText.substring(http.responseText.indexOf("name")+8, http.responseText.indexOf("desc")-8);
+                    var link = http.responseText.substring(http.responseText.indexOf("source")+10, http.responseText.indexOf("state")-8);
+                    responses[index] = name + ";" + link;
                     completedRequests++;
                     checkDone();
                 }
@@ -63,24 +79,21 @@ function request(url, index) {
 }
 
 function checkDone() {
-    if (completedRequests == cids.length) {
-        var returnString = "";
+    if (completedRequests == totalSize) {
+        var returnString = "<div id=\"response\">";
         for (var i = 0; i < responses.length; i++) {
-            returnString += (i != 0 ? "<br>" : "") + (responses[i].split(";")[1]) + "</br>" + responses[i].split(";")[0] + "</br>";
+            var parts = responses[i].split(";");
+            var name = parts[0];
+            var link = parts[1];
+            returnString += (i != 0 ? "<br>" : "") +  "<strong>" + name + "</strong></br>" + link + "</br>";
         }
-        document.body.innerHTML = returnString + "</br><button onclick=\"reload(); return false;\">Go back</button>";
+        document.body.innerHTML = returnString + "</br><button id=\"back\" onclick=\"reload(); return false;\">Go back</button></div>";
+    } else {
+        var progress = Math.round((completedRequests / totalSize)*100);
+        document.getElementById("progress").innerHTML = progress + "%";
     }
 }
 
 function reload() {
-    location.reload();
-}
-
-function find(array, key) {
-    for (var i = 0; i < array.length; i++) {
-        var t = array[i];
-        if (t.includes(key)) {
-            return t.replace(key, "");
-        }
-    }
+  location.reload();
 }

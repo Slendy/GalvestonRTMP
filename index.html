@@ -1,33 +1,40 @@
 <html>
+<link rel="stylesheet" type="text/css" href="style.css">
+<h1> Livestream link finder </h1>
+<div style="text-align: center;">
+    <div style="display: inline-block; text-align: left;">
+        <form id="checkBoxes">
+            <label><input type="checkbox" name="CID_HCIR000000A0" checked>Cruise cam</label><br>
+            <label><input type="checkbox" name="CID_KLBA00000098" checked>Emerald cam</label><br>
+            <label><input type="checkbox" name="CID_KPIK000004AD" checked>Marina cam</label><br>
+            <label><input type="checkbox" name="CID_JVHJ0000009B" checked>Strand cam</label><br>
 
-<form id="form1">
-  <label><input type="checkbox" name="CID_HCIR000000A0" checked>Cruise cam</label><br>
-  <label><input type="checkbox" name="CID_KLBA00000098" checked>Emerald cam</label><br>
-  <label><input type="checkbox" name="CID_KPIK000004AD" checked>Marina cam</label><br>
-  <label><input type="checkbox" name="CID_JVHJ0000009B" checked>Strand cam</label><br>
+            <label><input type="checkbox" name="CID_SVMP0000029F">Babe's beach cam</label><br>
+            <label><input type="checkbox" name="CID_NCUS00000344">East beach cam</label><br>
+            <label><input type="checkbox" name="CID_ZFXT00000403">Murdoch cam</label><br>
+            <label><input type="checkbox" name="CID_KYUQ00000099">Pier 23 cam</label><br>
+            <label><input type="checkbox" name="CID_BQUM000000BA">Pyramid cam</label><br>
+            <label><input type="checkbox" name="CID_HIEV0000024F">Seawall cam</label><br>
+            <label><input type="checkbox" name="CID_BKTJ0000015F">Surf cam</label><br>
+            <select id="formatType">
+                <option value="rtmp">RTMP</option>
+                <option value="rtsp">RTSP</option>
+                <option value="m3u8">HLS</option>
+                <option value="mjpeg">MJPEG</option>
+            </select>
+            <button type="submit" id="standard">Submit</button>    
+        </form>
+    </div>
+    <span id="progress"></span>
+</div>
+<form id="customInput">
+    <label> Custom CID
+        <br><span style="color:red" id="error_msg"></span>
+        <input type="textbox" id="cidInput" placeholder="CID_">
+    </label>
+    <button type="submit" id="custom">Submit</button>
+    </formCustom>
 
-  <label><input type="checkbox" name="CID_SVMP0000029F">Babe's beach cam</label><br>
-  <label><input type="checkbox" name="CID_NCUS00000344">East beach cam</label><br>
-  <label><input type="checkbox" name="CID_ZFXT00000403">Murdoch cam</label><br>
-  <label><input type="checkbox" name="CID_KYUQ00000099">Pier 23 cam</label><br>
-  <label><input type="checkbox" name="CID_BQUM000000BA">Pyramid cam</label><br>
-  <label><input type="checkbox" name="CID_HIEV0000024F">Seawall cam</label><br>
-  <label><input type="checkbox" name="CID_BKTJ0000015F">Surf cam</label><br>
-  <select name="list" form="form1">
-    <option value="rtmp">RTMP</option>
-    <option value="rtsp">RTSP</option>
-    <option value="m3u8">HLS</option>
-    <option value="mjpeg">MJPEG</option>
-    </select>
-  <button type="submit">Submit</button>
-</form>
+    <script type="text/javascript" src="script.js"></script>
 
-<form id="form2">
- <label> Custom CID <input type="textbox" placeholder="CID_"></label>
-  <button type="submit">Submit</button>
-</formCustom>
-<span id="error_msg"></span>
-
-<script type="text/javascript" src="script.js"></script>
-  
 </html>
