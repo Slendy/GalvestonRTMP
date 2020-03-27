@@ -20,6 +20,13 @@ button {
 button:hover {
   background-color: #606060
 }
+#name{
+  font-weight: bold;
+  padding-bottom: 0px;
+}
+#stream {
+  padding-bottom: 23px;
+}
 #response {
   padding-top: 70px;
   text-align: center;

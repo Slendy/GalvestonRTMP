@@ -85,9 +85,9 @@ function checkDone() {
             var parts = responses[i].split(";");
             var name = parts[0];
             var link = parts[1];
-            returnString += (i != 0 ? "<br>" : "") +  "<strong>" + name + "</strong></br>" + link + "</br>";
+            returnString += "<div id=\"stream\"><div id=\"name\">" + name + "</div>" + link + "</div>"
         }
-        document.body.innerHTML = returnString + "</br><button id=\"back\" onclick=\"reload(); return false;\">Go back</button></div>";
+        document.body.innerHTML = returnString + "<button id=\"back\" onclick=\"reload(); return false;\">Go back</button></div>";
     } else {
         var progress = Math.round((completedRequests / totalSize)*100);
         document.getElementById("progress").innerHTML = progress + "%";
