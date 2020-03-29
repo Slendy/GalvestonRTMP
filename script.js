@@ -42,7 +42,7 @@ var completedRequests = 0;
 var totalSize;
 
 function fetchLinks(cids, videoType) {
-    responses = Array(cids.length).fill(0)
+    responses = Array(cids.length).fill(0);
     totalSize = cids.length;
     for (var i = 0; i < cids.length; i++) {
         request(cids[i], i, videoType);
@@ -56,7 +56,10 @@ function request(cid, index, videoType) {
     http.onreadystatechange = function() {
         if (http.readyState == 4) {
              if(http.status != 200){
-                 responses[index] = cid + ";Request failed. (Invalid cid?)"
+                 responses[index] = cid + ";Request failed. (Invalid cid?)";
+                 completedRequests++;
+                 checkDone();
+                 return;
              }
              var oid = http.responseText.substring(http.responseText.indexOf("id")+6, http.responseText.indexOf("server")-8);
              http = new XMLHttpRequest();
@@ -65,7 +68,10 @@ function request(cid, index, videoType) {
              http.onreadystatechange = function() {
                 if (http.readyState == 4) {
                     if(http.status != 200){
-                        responses[index] = cid + ";Request failed. (Invalid cid?)"
+                        responses[index] = cid + ";Request failed. (Invalid cid?)";
+                        completedRequests++;
+                        checkDone();
+                        return;
                     }
                     var name = http.responseText.substring(http.responseText.indexOf("name")+8, http.responseText.indexOf("desc")-8);
                     var link = http.responseText.substring(http.responseText.indexOf("source")+10, http.responseText.indexOf("state")-8);
