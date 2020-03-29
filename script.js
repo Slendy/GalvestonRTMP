@@ -7,7 +7,7 @@ function handleClick(event){
     if(cid != null && cid.length != 0){//custom 
         if (cid.startsWith("CID") && cid.length == 16) {
             cids = [cid];
-            fetchLinks(cids);
+            fetchLinks(cids, videoType);
         } else {
             document.getElementById("error_msg").innerHTML = "Invalid camera id<br>";
             if(error != null){
